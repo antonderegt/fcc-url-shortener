@@ -8,12 +8,16 @@ module.exports = (app, db) => {
     app.use(bodyParser.urlencoded({ extended: true }))
     
     const shortenForm = (req, res) => {
-        req.params.url = req.body.text
-        shorten(req, res)
+        req.params = {
+            '0': '', 
+            'url': req.body.text
+        }
+        checkUrl(req, res)
     }
     
     const checkUrl = (req, res) => {
         let url  = req.params.url + req.params['0']
+        
         let collection = db.collection('sites')
         collection.find({
             "longUrl": url
